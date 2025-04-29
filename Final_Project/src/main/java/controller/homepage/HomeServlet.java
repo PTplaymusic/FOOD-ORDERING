@@ -1,3 +1,4 @@
+// HomeServlet.java
 package controller.homepage;
 
 import jakarta.servlet.ServletException;
@@ -25,28 +26,28 @@ public class HomeServlet extends HttpServlet {
     }
 
     private void redirectByRole(HttpServletResponse response, HttpSession session, String role) throws IOException {
-        if ("customer".equals(role)) {
-            response.sendRedirect("customer"); // Servlet: CustomerDashboardServlet
-        } else if ("shipper".equals(role)) {
-            response.sendRedirect("shipper"); // Servlet: ShipperDashboardServlet
-        } else if ("restaurant".equals(role)) {
-            response.sendRedirect("restaurant"); // Servlet: RestaurantDashboardServlet
-        } else if ("admin".equals(role)) {
-            response.sendRedirect("admin"); // Servlet: AdminDashboardServlet
-        } else {
-            session.invalidate();
-            response.sendRedirect("login");
+        switch (role) {
+            case "customer":
+                response.sendRedirect("customer");
+                break;
+            case "shipper":
+                response.sendRedirect("shipper");
+                break;
+            case "restaurant":
+                response.sendRedirect("restaurant");
+                break;
+            case "admin":
+                response.sendRedirect("admin");
+                break;
+            default:
+                session.invalidate();
+                response.sendRedirect("login");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Cho phép POST gọi lại GET
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Redirects authenticated users to the correct dashboard based on role";
+        doGet(request, response);
     }
 }

@@ -1,4 +1,4 @@
-package controller.logingooglel;
+package controller.loginregisterverify;
 
 import dao.CustomerDAO;
 import dao.ShipperDAO;
@@ -21,7 +21,7 @@ public class VerifyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/loginverify/verify.jsp").forward(request, response);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class VerifyServlet extends HttpServlet {
 
         if (inputCode == null || inputCode.isEmpty()) {
             request.setAttribute("error", "Please enter the verification code.");
-            request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/loginverify/verify.jsp").forward(request, response);
             return;
         }
 
@@ -105,7 +105,7 @@ public class VerifyServlet extends HttpServlet {
                 }
             } else {
                 request.setAttribute("error", "Incorrect verification code.");
-                request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/loginverify/verify.jsp").forward(request, response);
             }
         } else {
             // ➡️ Xác thực đăng ký bằng form thường
@@ -122,7 +122,7 @@ public class VerifyServlet extends HttpServlet {
                 response.sendRedirect("home");
             } else {
                 request.setAttribute("error", "Invalid or expired verification code.");
-                request.getRequestDispatcher("/WEB-INF/views/verify.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/loginverify/verify.jsp").forward(request, response);
             }
         }
     }

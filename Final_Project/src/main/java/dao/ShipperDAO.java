@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import utils.service.ImageUtil;
 
 public class ShipperDAO extends DBContext {
 
@@ -16,6 +17,33 @@ public class ShipperDAO extends DBContext {
     public ShipperDAO() {
         super();
         this.conn = super.conn;
+    }
+    // Trong ShipperDAO.java
+
+    public List<Shippers> getAllShippers() {
+        List<Shippers> list = new ArrayList<>();
+        String sql = "SELECT * FROM Shippers";
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Shippers shipper = new Shippers();
+                shipper.setShipperId(rs.getInt("shipper_id"));
+                shipper.setName(rs.getString("name"));
+                shipper.setEmail(rs.getString("email"));
+                shipper.setPhone(rs.getString("phone"));
+                shipper.setPassword(rs.getString("password"));
+                shipper.setCccd(rs.getString("cccd"));
+                shipper.setDriverLicense(rs.getString("driver_license"));
+                shipper.setAddress(rs.getString("address"));
+                shipper.setVehicleInfo(rs.getString("vehicle_info"));
+                shipper.setStatusId(rs.getInt("status_id"));
+                shipper.setCreatedAt(rs.getTimestamp("created_at"));
+                list.add(shipper);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public int insertShipperAndReturnId(Shippers shipper, Part licenseImagePart) {
@@ -29,9 +57,9 @@ public class ShipperDAO extends DBContext {
             stmt.setString(5, shipper.getCccd());
             stmt.setString(6, shipper.getDriverLicense());
 
-            try (InputStream inputStream = licenseImagePart.getInputStream()) {
-                stmt.setBinaryStream(7, inputStream, (int) licenseImagePart.getSize());
-            }
+            // ✅ Convert file ảnh thành byte[] rồi lưu
+            byte[] imageBytes = ImageUtil.partToBytes(licenseImagePart);
+            stmt.setBytes(7, imageBytes);
 
             stmt.setString(8, shipper.getVehicleInfo() != null ? shipper.getVehicleInfo() : "Unknown");
             stmt.setString(9, shipper.getPassword());
@@ -92,4 +120,19 @@ public class ShipperDAO extends DBContext {
         shipper.setCreatedAt(rs.getTimestamp("created_at"));
         return shipper;
     }
+
+    // Trong ShipperDAO.java
+    public boolean updateStatus(int shipperId, int statusId) {
+        String sql = "UPDATE Shippers SET status_id = ? WHERE shipper_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, statusId);
+            stmt.setInt(2, shipperId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

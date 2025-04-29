@@ -1,4 +1,4 @@
-package controller.logingooglel;
+package controller.logingoogle;
 
 import dao.GoogleLoginDao;
 import dao.VerificationDAO;

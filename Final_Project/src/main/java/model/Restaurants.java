@@ -14,6 +14,7 @@ public class Restaurants {
     private String cuisineType;
     private int statusId;
     private Timestamp createdAt;
+    private Double totalPayment;
 
     public Restaurants() {
     }
@@ -30,6 +31,14 @@ public class Restaurants {
         this.cuisineType = cuisineType;
         this.statusId = statusId;
         this.createdAt = createdAt;
+    }
+
+    public Double getTotalPayment() {
+        return totalPayment;
+    }
+
+    public void setTotalPayment(Double totalPayment) {
+        this.totalPayment = totalPayment;
     }
 
     // Getters and Setters

@@ -1,4 +1,4 @@
-package controller.logingooglel;
+package controller.logingoogle;
 
 import dao.ShipperDAO;
 import jakarta.servlet.ServletException;
@@ -48,9 +48,16 @@ public class ShipperCompleteProfileServlet extends HttpServlet {
         String confirmPassword = request.getParameter("confirm_password");
         Part driverLicenseImage = request.getPart("driver_license_image");
 
+        // Validate fields
         if (phone == null || address == null || cccd == null || driverLicense == null
-                || password == null || confirmPassword == null || driverLicenseImage == null) {
+                || password == null || confirmPassword == null || driverLicenseImage == null
+                || phone.trim().isEmpty() || address.trim().isEmpty() || cccd.trim().isEmpty() || driverLicense.trim().isEmpty()) {
             request.setAttribute("error", "Please fill in all fields.");
+            request.getRequestDispatcher("/WEB-INF/Google/shipper-complete-profile.jsp").forward(request, response);
+            return;
+        }
+        if (!phone.matches("0\\d{9}")) {
+            request.setAttribute("error", "Phone number must start with 0 and have exactly 10 digits.");
             request.getRequestDispatcher("/WEB-INF/Google/shipper-complete-profile.jsp").forward(request, response);
             return;
         }
@@ -61,8 +68,10 @@ public class ShipperCompleteProfileServlet extends HttpServlet {
             return;
         }
 
+        // Hash password
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 
+        // Tạo shipper object
         Shippers shipper = new Shippers();
         shipper.setName(name);
         shipper.setEmail(email);
@@ -71,9 +80,10 @@ public class ShipperCompleteProfileServlet extends HttpServlet {
         shipper.setCccd(cccd);
         shipper.setDriverLicense(driverLicense);
         shipper.setPassword(hashedPassword);
-        shipper.setStatusId(0); // Pending Approval
+        shipper.setStatusId(0); // pending approval
         shipper.setCreatedAt(Timestamp.from(Instant.now()));
 
+        // Insert database
         ShipperDAO shipperDAO = new ShipperDAO();
         int shipperId = shipperDAO.insertShipperAndReturnId(shipper, driverLicenseImage);
 

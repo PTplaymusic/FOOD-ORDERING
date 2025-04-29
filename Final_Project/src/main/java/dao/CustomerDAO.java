@@ -159,4 +159,17 @@ public class CustomerDAO extends DBContext {
         customer.setCreatedAt(rs.getTimestamp("created_at"));
         return customer;
     }
+
+    public boolean updateStatus(int customerId, int statusId) {
+        String sql = "UPDATE Customers SET status_id = ? WHERE customer_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, statusId);
+            stmt.setInt(2, customerId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

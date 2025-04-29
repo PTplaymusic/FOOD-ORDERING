@@ -1,4 +1,4 @@
-package controller.logingooglel;
+package controller.logingoogle;
 
 import dao.CustomerDAO;
 import jakarta.servlet.ServletException;

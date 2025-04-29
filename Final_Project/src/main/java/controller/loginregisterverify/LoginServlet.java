@@ -1,16 +1,10 @@
-package controller;
+package controller.loginregisterverify;
 
-import dao.CustomerDAO;
-import dao.ShipperDAO;
-import dao.RestaurantDAO;
-import dao.AdminDAO;
+import dao.*;
+import model.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import model.Customers;
-import model.Shippers;
-import model.Restaurants;
-import model.Admins;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
@@ -21,7 +15,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
     }
 
     @Override
@@ -36,7 +30,7 @@ public class LoginServlet extends HttpServlet {
 
         if (email == null || password == null || role == null) {
             request.setAttribute("error", "Missing login information.");
-            request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
             return;
         }
 
@@ -45,21 +39,15 @@ public class LoginServlet extends HttpServlet {
                 CustomerDAO customerDAO = new CustomerDAO();
                 Customers customer = customerDAO.getCustomerByEmail(email);
 
-                if (customer == null) {
+                if (!validateLogin(customer, password)) {
                     request.setAttribute("error", "Invalid email or password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
-                    return;
-                }
-
-                if (!BCrypt.checkpw(password, customer.getPassword())) {
-                    request.setAttribute("error", "Incorrect password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
                 if (customer.getStatusId() != 1) { // 1 = Active
                     request.setAttribute("error", "Your account is not activated or has been banned.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
@@ -72,21 +60,15 @@ public class LoginServlet extends HttpServlet {
                 ShipperDAO shipperDAO = new ShipperDAO();
                 Shippers shipper = shipperDAO.getShipperByEmail(email);
 
-                if (shipper == null) {
+                if (!validateLogin(shipper, password)) {
                     request.setAttribute("error", "Invalid email or password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
-                    return;
-                }
-
-                if (!BCrypt.checkpw(password, shipper.getPassword())) {
-                    request.setAttribute("error", "Incorrect password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
                 if (shipper.getStatusId() != 1) {
                     request.setAttribute("error", "Your shipper account is not activated or has been banned.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
@@ -99,21 +81,15 @@ public class LoginServlet extends HttpServlet {
                 RestaurantDAO restaurantDAO = new RestaurantDAO();
                 Restaurants restaurant = restaurantDAO.getRestaurantByEmail(email);
 
-                if (restaurant == null) {
+                if (!validateLogin(restaurant, password)) {
                     request.setAttribute("error", "Invalid email or password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
-                    return;
-                }
-
-                if (!BCrypt.checkpw(password, restaurant.getPassword())) {
-                    request.setAttribute("error", "Incorrect password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
                 if (restaurant.getStatusId() != 1) {
                     request.setAttribute("error", "Your restaurant account is not activated or has been banned.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
@@ -126,15 +102,9 @@ public class LoginServlet extends HttpServlet {
                 AdminDAO adminDAO = new AdminDAO();
                 Admins admin = adminDAO.getAdminByEmail(email);
 
-                if (admin == null) {
+                if (!validateLogin(admin, password)) {
                     request.setAttribute("error", "Invalid admin credentials.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
-                    return;
-                }
-
-                if (!BCrypt.checkpw(password, admin.getPassword())) {
-                    request.setAttribute("error", "Incorrect admin password.");
-                    request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                     return;
                 }
 
@@ -145,9 +115,28 @@ public class LoginServlet extends HttpServlet {
 
             default:
                 request.setAttribute("error", "Invalid role selected.");
-                request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/loginverify/login.jsp").forward(request, response);
                 break;
         }
+    }
+
+    private boolean validateLogin(Object user, String password) {
+        if (user == null) {
+            return false;
+        }
+
+        String hashedPassword = null;
+        if (user instanceof Customers) {
+            hashedPassword = ((Customers) user).getPassword();
+        } else if (user instanceof Shippers) {
+            hashedPassword = ((Shippers) user).getPassword();
+        } else if (user instanceof Restaurants) {
+            hashedPassword = ((Restaurants) user).getPassword();
+        } else if (user instanceof Admins) {
+            hashedPassword = ((Admins) user).getPassword();
+        }
+
+        return hashedPassword != null && BCrypt.checkpw(password, hashedPassword);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package controller;
+package controller.loginregisterverify;
 
 import dao.CustomerDAO;
 import dao.RestaurantDAO;
@@ -29,7 +29,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/loginverify/register.jsp").forward(request, response);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
         String role = request.getParameter("role");
         if (role == null) {
             request.setAttribute("error", "Role is required.");
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/loginverify/register.jsp").forward(request, response);
             return;
         }
 
@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
                 break;
             default:
                 request.setAttribute("error", "Invalid role");
-                request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/loginverify/register.jsp").forward(request, response);
         }
     }
 
@@ -173,13 +173,13 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         if (error != null) {
             request.setAttribute("error", error);
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/loginverify/register.jsp").forward(request, response);
             return;
         }
 
         if (userId == -1) {
             request.setAttribute("error", "Failed to register. Please try again.");
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/loginverify/register.jsp").forward(request, response);
             return;
         }
 

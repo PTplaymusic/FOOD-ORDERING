@@ -11,8 +11,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login - Food Delivery App</title>
-        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
         <style>
             body {
                 background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -22,6 +22,7 @@
                 justify-content: center;
                 margin: 0;
                 padding: 0;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             .login-card {
                 max-width: 900px;
@@ -36,18 +37,20 @@
                 background: #f8f9fa;
                 padding: 10px;
                 justify-content: center;
+                border-radius: 15px 15px 0 0;
             }
             .nav-tabs .nav-link {
                 border: none;
                 border-radius: 10px;
                 margin: 0 5px;
                 padding: 10px 20px;
-                color: #333;
+                color: #343a40;
                 font-weight: 500;
                 transition: all 0.3s ease;
             }
             .nav-tabs .nav-link:hover {
                 background: #e9ecef;
+                color: #007bff;
             }
             .nav-tabs .nav-link.active {
                 background: #007bff;
@@ -56,7 +59,14 @@
             .tab-pane {
                 padding: 30px;
                 border-radius: 0 0 15px 15px;
-                transition: background-color 0.3s ease;
+                transition: background-color 0.5s ease, opacity 0.3s ease;
+                opacity: 1;
+            }
+            .tab-pane.fade {
+                opacity: 0;
+            }
+            .tab-pane.fade.show {
+                opacity: 1;
             }
             #customer {
                 background-color: #d4edda;
@@ -73,23 +83,47 @@
             .form-floating label {
                 color: #555;
             }
-            .btn-social {
+            .btn-social, .btn-login, .btn-register {
                 transition: all 0.3s ease;
             }
-            .btn-social:hover {
+            .btn-social:hover, .btn-login:hover, .btn-register:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             }
+            .btn-login {
+                background: #007bff;
+                border: none;
+                padding: 10px;
+            }
+            .btn-login:hover {
+                background: #0056b3;
+            }
+            .btn-register {
+                border-color: #007bff;
+                color: #007bff;
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            .btn-register:hover {
+                background: #007bff;
+                color: #fff;
+            }
             .error-alert {
                 animation: fadeIn 0.5s;
+                font-size: 0.9rem;
             }
             @keyframes fadeIn {
                 from {
                     opacity: 0;
+                    transform: translateY(-10px);
                 }
                 to {
                     opacity: 1;
+                    transform: translateY(0);
                 }
+            }
+            .title-icon {
+                margin-right: 8px;
             }
             @media (max-width: 576px) {
                 .login-card {
@@ -102,35 +136,44 @@
                 .tab-pane {
                     padding: 20px;
                 }
+                .btn-register {
+                    padding: 6px 12px;
+                    font-size: 0.85rem;
+                }
             }
         </style>
     </head>
     <body>
         <div class="login-card">
             <div class="p-4">
-                <h2 class="text-center mb-3 fw-bold">Welcome to Food Delivery App</h2>
-                <p class="text-center text-muted mb-4">Sign in to your account or <a href="register" class="text-primary">create a new one</a></p>
+                <h2 class="text-center mb-3 fw-bold"><i class="bi bi-box-arrow-in-right title-icon"></i> Welcome to Food Delivery App</h2>
+                <p class="text-center text-muted mb-4">
+                    Sign in to your account or 
+                    <a href="register" class="btn btn-outline-primary btn-register">
+                        <i class="bi bi-person-plus title-icon"></i>Create a new one
+                    </a>
+                </p>
 
                 <!-- Tabs for role selection -->
                 <ul class="nav nav-tabs" id="roleTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="customer" aria-selected="true">
-                            <i class="fas fa-user me-2"></i>Customer
+                            <i class="bi bi-person title-icon"></i>Customer
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="shipper-tab" data-bs-toggle="tab" data-bs-target="#shipper" type="button" role="tab" aria-controls="shipper" aria-selected="false">
-                            <i class="fas fa-bicycle me-2"></i>Shipper
+                            <i class="bi bi-truck title-icon"></i>Shipper
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="restaurant-tab" data-bs-toggle="tab" data-bs-target="#restaurant" type="button" role="tab" aria-controls="restaurant" aria-selected="false">
-                            <i class="fas fa-utensils me-2"></i>Restaurant
+                            <i class="bi bi-shop title-icon"></i>Restaurant
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" aria-controls="admin" aria-selected="false">
-                            <i class="fas fa-user-shield me-2"></i>Admin
+                            <i class="bi bi-shield-lock title-icon"></i>Admin
                         </button>
                     </li>
                 </ul>
@@ -141,7 +184,7 @@
                     <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
                         <div class="row gy-4 justify-content-center">
                             <div class="col-12 col-lg-5">
-                                <form action="login" method="POST">
+                                <form action="login" method="POST" class="login-form">
                                     <input type="hidden" name="role" value="customer">
                                     <div class="row gy-3">
                                         <div class="col-12">
@@ -170,8 +213,8 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 rounded-4 py-2" type="submit">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Log in
+                                            <button class="btn btn-login w-100 rounded-4 py-2" type="submit">
+                                                <i class="bi bi-box-arrow-in-right title-icon"></i>Log in
                                             </button>
                                         </div>
                                     </div>
@@ -182,13 +225,13 @@
                             </div>
                             <div class="col-12 col-lg-5">
                                 <div class="d-flex flex-column gap-3">
-                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/Final_Project/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=customer"
+                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWPProjectV1/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=customer"
                                        class="btn btn-outline-danger btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-google me-2"></i>Continue with Google
+                                        <i class="bi bi-google title-icon"></i>Continue with Google
                                     </a>
                                     <a href="https://www.facebook.com/v10.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=http://localhost:8080/SWPProject/login&scope=email,public_profile&state=customer"
                                        class="btn btn-outline-primary btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                        <i class="bi bi-facebook title-icon"></i>Continue with Facebook
                                     </a>
                                 </div>
                             </div>
@@ -198,7 +241,7 @@
                     <div class="tab-pane fade" id="shipper" role="tabpanel" aria-labelledby="shipper-tab">
                         <div class="row gy-4 justify-content-center">
                             <div class="col-12 col-lg-5">
-                                <form action="login" method="POST">
+                                <form action="login" method="POST" class="login-form">
                                     <input type="hidden" name="role" value="shipper">
                                     <div class="row gy-3">
                                         <div class="col-12">
@@ -227,8 +270,8 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 rounded-4 py-2" type="submit">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Log in
+                                            <button class="btn btn-login w-100 rounded-4 py-2" type="submit">
+                                                <i class="bi bi-box-arrow-in-right title-icon"></i>Log in
                                             </button>
                                         </div>
                                     </div>
@@ -239,13 +282,13 @@
                             </div>
                             <div class="col-12 col-lg-5">
                                 <div class="d-flex flex-column gap-3">
-                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/Final_Project/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=shipper"
+                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWPProjectV1/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=shipper"
                                        class="btn btn-outline-danger btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-google me-2"></i>Continue with Google
+                                        <i class="bi bi-google title-icon"></i>Continue with Google
                                     </a>
                                     <a href="https://www.facebook.com/v10.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=http://localhost:8080/SWPProject/login&scope=email,public_profile&state=shipper"
                                        class="btn btn-outline-primary btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                        <i class="bi bi-facebook title-icon"></i>Continue with Facebook
                                     </a>
                                 </div>
                             </div>
@@ -255,7 +298,7 @@
                     <div class="tab-pane fade" id="restaurant" role="tabpanel" aria-labelledby="restaurant-tab">
                         <div class="row gy-4 justify-content-center">
                             <div class="col-12 col-lg-5">
-                                <form action="login" method="POST">
+                                <form action="login" method="POST" class="login-form">
                                     <input type="hidden" name="role" value="restaurant">
                                     <div class="row gy-3">
                                         <div class="col-12">
@@ -284,8 +327,8 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 rounded-4 py-2" type="submit">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Log in
+                                            <button class="btn btn-login w-100 rounded-4 py-2" type="submit">
+                                                <i class="bi bi-box-arrow-in-right title-icon"></i>Log in
                                             </button>
                                         </div>
                                     </div>
@@ -296,13 +339,13 @@
                             </div>
                             <div class="col-12 col-lg-5">
                                 <div class="d-flex flex-column gap-3">
-                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/Final_Project/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=restaurant"
+                                    <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWPProjectV1/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=restaurant"
                                        class="btn btn-outline-danger btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-google me-2"></i>Continue with Google
+                                        <i class="bi bi-google title-icon"></i>Continue with Google
                                     </a>
                                     <a href="https://www.facebook.com/v10.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=http://localhost:8080/SWPProject/login&scope=email,public_profile&state=restaurant"
                                        class="btn btn-outline-primary btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                        <i class="bi bi-facebook title-icon"></i>Continue with Facebook
                                     </a>
                                 </div>
                             </div>
@@ -312,7 +355,7 @@
                     <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
                         <div class="row gy-4 justify-content-center">
                             <div class="col-12 col-lg-5">
-                                <form action="login" method="POST">
+                                <form action="login" method="POST" class="login-form">
                                     <input type="hidden" name="role" value="admin">
                                     <div class="row gy-3">
                                         <div class="col-12">
@@ -341,8 +384,8 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary w-100 rounded-4 py-2" type="submit">
-                                                <i class="fas fa-sign-in-alt me-2"></i>Log in
+                                            <button class="btn btn-login w-100 rounded-4 py-2" type="submit">
+                                                <i class="bi bi-box-arrow-in-right title-icon"></i>Log in
                                             </button>
                                         </div>
                                     </div>
@@ -355,11 +398,11 @@
                                 <div class="d-flex flex-column gap-3">
                                     <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile%20openid&redirect_uri=http://localhost:8080/SWPProjectV1/login-google&response_type=code&client_id=867859741686-1u47odeeuukpntrhnroar7694gdajp4t.apps.googleusercontent.com&approval_prompt=force&state=admin"
                                        class="btn btn-outline-danger btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-google me-2"></i>Continue with Google
+                                        <i class="bi bi-google title-icon"></i>Continue with Google
                                     </a>
                                     <a href="https://www.facebook.com/v10.0/dialog/oauth?client_id=YOUR_FACEBOOK_APP_ID&redirect_uri=http://localhost:8080/SWPProject/login&scope=email,public_profile&state=admin"
                                        class="btn btn-outline-primary btn-social w-100 rounded-4 py-2">
-                                        <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                        <i class="bi bi-facebook title-icon"></i>Continue with Facebook
                                     </a>
                                 </div>
                             </div>
@@ -369,11 +412,47 @@
                 <!-- Error message -->
                 <% if (request.getAttribute("error") != null) {%>
                 <div class="alert alert-danger error-alert mt-4 mx-4 rounded-4" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i><%= request.getAttribute("error")%>
+                    <i class="bi bi-exclamation-circle title-icon"></i><%= request.getAttribute("error")%>
                 </div>
                 <% }%>
             </div>
         </div>
-        <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Tự động focus vào trường email khi chuyển tab
+            document.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (event) {
+                    const targetTab = event.target.getAttribute('data-bs-target').substring(1); // Lấy ID của tab (customer, shipper, v.v.)
+                    const emailInput = document.getElementById(`${targetTab}_email`);
+                    if (emailInput) {
+                        emailInput.focus();
+                    }
+                });
+            });
+
+            // Hiệu ứng loading khi submit form
+            document.querySelectorAll('.login-form').forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    const submitButton = form.querySelector('.btn-login');
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="bi bi-arrow-clockwise title-icon"></i>Logging in...';
+                });
+            });
+
+            // Hiệu ứng loading cho nút social login
+            document.querySelectorAll('.btn-social').forEach(button => {
+                button.addEventListener('click', function () {
+                    this.innerHTML = '<i class="bi bi-arrow-clockwise title-icon"></i>Connecting...';
+                    this.classList.add('disabled');
+                });
+            });
+
+            // Hiệu ứng loading cho nút register
+            document.querySelector('.btn-register').addEventListener('click', function () {
+                this.innerHTML = '<i class="bi bi-arrow-clockwise title-icon"></i>Redirecting...';
+                this.classList.add('disabled');
+            });
+        </script>
     </body>
 </html>

@@ -76,17 +76,18 @@ public class AdminDAO extends DBContext {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Admins(
-                        rs.getInt("admin_id"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getTimestamp("created_at")
-                );
+                Admins admin = new Admins();
+                admin.setAdminId(rs.getInt("admin_id"));
+                admin.setName(rs.getString("name"));
+                admin.setEmail(rs.getString("email"));
+                admin.setPassword(rs.getString("password"));
+                admin.setCreatedAt(rs.getTimestamp("created_at"));
+                return admin;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 }

@@ -1,27 +1,25 @@
-package controller;
+// RestaurantServlet.java
+package controller.userservlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 
-@WebServlet(name = "CustomerServlet", urlPatterns = {"/customer"})
-public class CustomerServlet extends HttpServlet {
+@WebServlet(name = "RestaurantServlet", urlPatterns = {"/restaurant"})
+public class RestaurantServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || !"customer".equals(session.getAttribute("role"))) {
-            // Không phải customer -> Đá về login
+        if (session == null || !"restaurant".equals(session.getAttribute("role"))) {
             response.sendRedirect("login");
             return;
         }
 
-        // Nếu đúng role -> Forward tới customer.jsp
-        request.getRequestDispatcher("/WEB-INF/views/customer.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/homepage/restaurant.jsp").forward(request, response);
     }
 
     @Override
@@ -32,6 +30,6 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Handles Customer Home Page after login";
+        return "Restaurant Dashboard Servlet";
     }
 }
